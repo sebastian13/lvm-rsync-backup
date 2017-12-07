@@ -13,6 +13,9 @@ lvm-rsync-backup.sh my-lv-disk /mnt/backup
 ```
 
 ```bash
+# The path variable needs to be set
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Sent output to
 MAILTO="mail@example.com"
 
@@ -34,6 +37,9 @@ To backup all LVs currently active on the machine, use the script **backup-lvs.s
 ```
 
 ```bash
+# The path variable needs to be set
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Sent output to
 MAILTO="mail@example.com"
 
