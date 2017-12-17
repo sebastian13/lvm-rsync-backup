@@ -27,7 +27,7 @@ MAILTO="mail@example.com"
 Don't forget to create a scheduled task that creates the filesystem-snapshots at your backup destination.
 
 ## Backup all LVs
-To backup all LVs currently active on the machine, use the script **backup-lvs.sh**, which uses **lvs** to get the names of every lv. This script uses **lvm-rsync-backup.sh**, therefore save both of them to */etc/backup*.
+To backup all LVs currently active on the machine, use the script **backup-lvs.sh**, which uses **lvs** to get the names of every lv. It will exclude LVs that have *swp* or *swap* in their name, as they cannot be mounted. This script uses **lvm-rsync-backup.sh**, therefore save both of them to */etc/backup*.
 
 1. Mount your backup device to the desired folder, for example to */mnt/backup*
 2. Run script via command or define a cronjob

@@ -5,7 +5,13 @@
 # ./backup-lvs.sh /mnt/backup
 #
 
-for lv in $(lvs --noheading -o lv_name | tr -d '  ')
+# lvs --noheading -o lv_name
+# List the lv_name of all LVs
+
+# grep -v -e 'swap' -e 'swp'
+# Exclude swap and swp lvs
+
+for lv in $(lvs --noheading -o lv_name | grep -v -e 'swap' -e 'swp' | tr -d '  ')
 do
 	/etc/backup/lvm-rsync-backup.sh $lv $1
 done
