@@ -117,7 +117,14 @@ if [ $? = 0 ]; then
 	### Backup the data
 	#
 	echo "START rsync transfer"
-	rsync -a --delete --stats ${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/
+	rsync -a --delete --delete-excluded --stats \
+		--exclude *_snapshots \
+		--exclude .@upload_cache \
+		--exclude @Recycle \
+		--exclude .papierkorb \
+		--exclude *TemporaryItems \
+		--exclude *DS_Store \
+		${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/
 
 	### Unmount the Snapshot
 	#
