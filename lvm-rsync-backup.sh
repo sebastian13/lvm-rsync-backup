@@ -23,6 +23,11 @@ echo "***"
 # Specify the Backup Mount
 # expected format: /mnt/backup-nas01
 BACKUP_SERVER=$2
+
+# Remove Tailing Slash, if there is one.
+length=${#BACKUP_SERVER}
+last_char=${BACKUP_SERVER:length-1:1}
+[[ $last_char == "/" ]] && BACKUP_SERVER=${BACKUP_SERVER:0:length-1}; 
 echo "BACKUP_SERVER: $BACKUP_SERVER"
 
 BUFFER_SIZE=5G
