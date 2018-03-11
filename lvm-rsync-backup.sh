@@ -27,7 +27,7 @@ echo "BACKUP_SERVER: $BACKUP_SERVER"
 
 BUFFER_SIZE=5G
 
-count=$(lvs | grep -c '\s${BACKUP_LV}\s')
+count=$(lvs | grep -c "\s${BACKUP_LV}\s")
 if [ $count != 1 ]; then
 	echo "There are multiple LVs similar to ${BACKUP_LV}."
 	exit 1
