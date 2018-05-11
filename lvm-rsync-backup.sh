@@ -27,7 +27,7 @@ function clean {
 	rmdir ${SNAPSHOT_MOUNT}
 	fi
 
-	DELETE_PATH=$(lvs --noheading -o lv_path | grep -P "( |$)$DELETE_LV( |$)" | tr -d '  ')
+	DELETE_PATH=$(lvs --noheading -o lv_path | grep -P "${DELETE_LV}( |$)" | tr -d '  ')
 	.log 6 "Delete Path         | $DELETE_PATH"
 
 	# If the snapshot logical volume still exists, remove it
@@ -220,6 +220,7 @@ else
 	    echo "Please provide a lv_name using the -l option!"
 	    exit 1
 	fi
-	clean
+
+	clean-all
 	backup
 fi
