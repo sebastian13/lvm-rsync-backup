@@ -193,6 +193,9 @@ then
     exit 1
 fi
 
+# Measure Execution Time
+START_TIME=$SECONDS
+
 if [ "$BACKUP_ALL" ]; then
 	clean-all
 
@@ -219,3 +222,8 @@ else
 	clean-all
 	backup
 fi
+
+# Print the Execution Time
+ELAPSED_TIME=$(($SECONDS - $START_TIME))
+echo "$(($ELAPSED_TIME/60)) min $(($ELAPSED_TIME%60)) sec"    
+#> 1 min 5 sec
