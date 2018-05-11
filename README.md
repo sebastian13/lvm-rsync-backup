@@ -20,6 +20,11 @@ Parameter               | Description                                           
 
 \* This will exclude LVs that have *swp* or *swap* in their name, as they cannot be mounted.
 
+## Exclude from Backup
+
+* To exclude **Logical Volumes** from -a Backup create a **exclude-lv.txt** beside lvm-rsync-backup.sh
+* To exclude files from **rsync** transfers create a **exclude-rsync.txt** beside lvm-rsync-backup.sh
+
 ## Examples
 
 ### Backup a single LV
@@ -30,7 +35,7 @@ Parameter               | Description                                           
 
 ### Backup all LVs
 ```bash
-./backup.sh -a -v7 -d /mnt/backup-nas01
+./lvm-rsync-backup.sh -a -v7 -d /mnt/backup-nas01
 ```
 
 ### Crontab
