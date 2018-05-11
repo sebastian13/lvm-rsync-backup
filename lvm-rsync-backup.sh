@@ -13,6 +13,8 @@ echo "[${LOG_LEVELS[$LEVEL]}]" "$@" >> backup.log 1>&2
 fi
 }
 
+MYDIR="$(dirname "$(readlink -f "$0")")"
+
 function clean {
 	.log 7 "clean ()"
 	.log 6 "LV to delete        | $DELETE_LV"
@@ -120,12 +122,7 @@ function backup {
 		#
 		.log 7 "START rsync transfer"
 		rsync -a --delete --delete-excluded --stats -h --info=progress2 \
-			--exclude *_snapshots \
-			--exclude .@upload_cache \
-			--exclude @Recycle \
-			--exclude .papierkorb \
-			--exclude *TemporaryItems \
-			--exclude *DS_Store \
+			--exclude-from "$MYDIR/exclude-rsync.txt" \
 			${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/
 	else
 		.log 3 "NO BACKUP WAS CREATED"
@@ -196,17 +193,15 @@ then
     exit 1
 fi
 
-MYDIR="$(dirname "$(readlink -f "$0")")"
-
 if [ "$BACKUP_ALL" ]; then
 	clean-all
 
 	for BACKUP_LV in $(lvs --noheading -o lv_name | grep -v -e 'swap' -e 'swp' | tr -d '  ')
 	do
 		echo
-		if grep -Fxq "$BACKUP_LV" $MYDIR/exclude.txt
+		if grep -Fxq "$BACKUP_LV" $MYDIR/exclude-lv.txt
 		then
-		    echo "--- $BACKUP_LV will not be backed up. It is listed in exclude.txt --- "
+		    echo "--- $BACKUP_LV will not be backed up. It is listed in exclude-lv.txt --- "
 		    echo
 		else
 		    echo "--- Backup of $BACKUP_LV ---"
