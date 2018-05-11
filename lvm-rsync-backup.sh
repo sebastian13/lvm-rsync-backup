@@ -119,7 +119,7 @@ function backup {
 		### Backup the data
 		#
 		.log 7 "START rsync transfer"
-		rsync -a --delete --delete-excluded --stats -h \
+		rsync -a --delete --delete-excluded --stats -h --info=progress2 \
 			--exclude *_snapshots \
 			--exclude .@upload_cache \
 			--exclude @Recycle \
@@ -196,12 +196,23 @@ then
     exit 1
 fi
 
+MYDIR="$(dirname "$(readlink -f "$0")")"
+
 if [ "$BACKUP_ALL" ]; then
 	clean-all
 
 	for BACKUP_LV in $(lvs --noheading -o lv_name | grep -v -e 'swap' -e 'swp' | tr -d '  ')
 	do
-		backup
+		echo
+		if grep -Fxq "$BACKUP_LV" $MYDIR/exclude.txt
+		then
+		    echo "--- $BACKUP_LV will not be backed up. It is listed in exclude.txt --- "
+		    echo
+		else
+		    echo "--- Backup of $BACKUP_LV ---"
+		    echo
+		    backup 
+		fi
 	done
 else
 	if [ ! "$BACKUP_LV" ]
