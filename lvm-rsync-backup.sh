@@ -111,8 +111,9 @@ function backup {
 	
 	if [ "$DF" ]
 	then
-		echo "Time: $(date +%F_%T)" >> $MYDIR/_lv-size-notice.log
-		echo $DF | tee -a $MYDIR/_lv-size-notice.log
+		echo >> ${BACKUP_DIRECTORY}_notice.log
+		echo "Time: $(date +%F_%T)" >> ${BACKUP_DIRECTORY}_notice.log
+		echo $DF | tee -a ${BACKUP_DIRECTORY}_notice.log
 	fi
 
 	DF=$(df -h | grep ${SNAPSHOT_MOUNT})
@@ -141,7 +142,7 @@ function backup {
 
 	if [ "$BTRFS_DEST" = true ] && [ "$BTRFS_SOURCE" = true ]
 	then
-		.log 5 "You should consider backing up this volume using BTRBK!"
+		.log 5 "You should consider backing up this volume using BTRBK!" | tee -a ${BACKUP_DIRECTORY}_notice.log
 	fi
 
 	### Check, if BTRBK is installed
@@ -155,13 +156,14 @@ function backup {
 		### Backup the data
 		#
 		.log 7 "START rsync transfer"
-		echo "Time: $(date +%F_%T)" >> ${BACKUP_DIRECTORY}/_backup.log
+		echo >> ${BACKUP_DIRECTORY}_backup.log
+		echo "Time: $(date +%F_%T)" >> ${BACKUP_DIRECTORY}_backup.log
 		# rsync options for more detailed output: --stats --info=progress2
-		rsync -a --delete --delete-excluded -h --info=progress2 \
+		rsync -a --delete --delete-excluded -h --stats \
 			--exclude-from "$MYDIR/exclude-rsync.txt" \
-			${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/ | tee -a ${BACKUP_DIRECTORY}/_backup.log
+			${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/ | tee -a ${BACKUP_DIRECTORY}_backup.log
 	else
-		.log 3 "NO BACKUP WAS CREATED" | tee -a ${BACKUP_DIRECTORY}/_backup.log
+		.log 3 "NO BACKUP WAS CREATED" | tee -a ${BACKUP_DIRECTORY}_backup.log
 	fi
 
 	### Unmount the Snapshot
