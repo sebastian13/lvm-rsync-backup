@@ -107,11 +107,12 @@ function backup {
 	#
 	mount -o ro ${SNAPSHOT_PATH} ${SNAPSHOT_MOUNT}
 
-	DF=$(df -hlP ${SNAPSHOT_MOUNT} | awk 'int($5)>80{print "Partition "$1" has only "$4" free."}')
+	DF=$(df -hlP ${SNAPSHOT_MOUNT} | awk 'int($5)>80{print "Partition "$1" has only "$4" free space left."}')
 	
 	if [ "$DF" ]
 	then
-		echo $DF
+		echo "Time: $(date +%F_%T)" >> $MYDIR/_lv-size-notice.log
+		echo $DF | tee -a $MYDIR/_lv-size-notice.log
 	fi
 
 	DF=$(df -h | grep ${SNAPSHOT_MOUNT})
