@@ -156,9 +156,9 @@ function backup {
 		.log 7 "START rsync transfer"
 		rsync -a --delete --delete-excluded --stats -h --info=progress2 \
 			--exclude-from "$MYDIR/exclude-rsync.txt" \
-			${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/
+			${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/ | tee ${BACKUP_DIRECTORY}/_backup.log
 	else
-		.log 3 "NO BACKUP WAS CREATED"
+		.log 3 "NO BACKUP WAS CREATED" | tee ${BACKUP_DIRECTORY}/_backup.log
 	fi
 
 	### Unmount the Snapshot
