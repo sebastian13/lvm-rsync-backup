@@ -117,6 +117,39 @@ function backup {
 	DF=$(df -h | grep ${SNAPSHOT_MOUNT})
 	.log 5 ${DF}
 
+
+	### BTRFS Checks
+	#
+	### Check, if Destination supports BTRFS
+	if (df -T ${DESTINATION} | grep -q 'btrfs')
+	then
+		BTRFS_DEST=true
+	else
+		BTRFS_DEST=false
+	fi
+	.log 6 "Dest. BTRFS capable | $BTRFS_DEST" 
+
+	### Check, if Source supports BTRFS
+	if (df -T ${SNAPSHOT_MOUNT} | grep -q 'btrfs')
+	then
+		BTRFS_SRC=true
+	else
+		BTRFS_SRC=false
+	fi
+	.log 6 "Src. BTRFS capable  | $BTRFS_SRC"
+
+	if [ "$BTRFS_DEST" = true ] && [ "$BTRFS_SOURCE" = true ]
+	then
+		.log 5 "You should consider backing up this volume using BTRBK!"
+	fi
+
+	### Check, if BTRBK is installed
+	if ! command -v btrbk >/dev/null
+	then
+		.log 5 "You will find BTRBK on github: https://github.com/digint/btrbk"
+	fi
+
+
 	if [ ! $NO_RSYNC ]; then
 		### Backup the data
 		#
