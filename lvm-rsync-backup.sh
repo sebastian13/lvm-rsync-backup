@@ -154,11 +154,13 @@ function backup {
 		### Backup the data
 		#
 		.log 7 "START rsync transfer"
-		rsync -a --delete --delete-excluded --stats -h --info=progress2 \
+		echo "Time: $(date +%F_%T)" >> ${BACKUP_DIRECTORY}/_backup.log
+		# rsync options for more detailed output: --stats --info=progress2
+		rsync -a --delete --delete-excluded -h --info=progress2 \
 			--exclude-from "$MYDIR/exclude-rsync.txt" \
-			${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/ | tee ${BACKUP_DIRECTORY}/_backup.log
+			${SNAPSHOT_MOUNT}/ ${BACKUP_DIRECTORY}/ | tee -a ${BACKUP_DIRECTORY}/_backup.log
 	else
-		.log 3 "NO BACKUP WAS CREATED" | tee ${BACKUP_DIRECTORY}/_backup.log
+		.log 3 "NO BACKUP WAS CREATED" | tee -a ${BACKUP_DIRECTORY}/_backup.log
 	fi
 
 	### Unmount the Snapshot
