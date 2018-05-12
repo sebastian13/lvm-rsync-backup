@@ -121,7 +121,7 @@ function backup {
 	### BTRFS Checks
 	#
 	### Check, if Destination supports BTRFS
-	if (df -T ${DESTINATION} | grep -q 'btrfs')
+	if (stat -f -c %T ${DESTINATION} | grep -q 'btrfs')
 	then
 		BTRFS_DEST=true
 	else
@@ -130,7 +130,7 @@ function backup {
 	.log 6 "Dest. BTRFS capable | $BTRFS_DEST" 
 
 	### Check, if Source supports BTRFS
-	if (df -T ${SNAPSHOT_MOUNT} | grep -q 'btrfs')
+	if (stat -f -c %T ${SNAPSHOT_MOUNT} | grep -q 'btrfs')
 	then
 		BTRFS_SRC=true
 	else
